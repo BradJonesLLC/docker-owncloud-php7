@@ -47,7 +47,7 @@ RUN curl -fsSL -o owncloud.tar.bz2 \
 
 VOLUME /var/www/html
 
-COPY docker-entrypoint.sh /entrypoint.sh
+COPY entrypoint.sh /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["apache2-foreground"]
