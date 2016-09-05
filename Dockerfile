@@ -48,8 +48,6 @@ RUN curl -fsSL -o owncloud.tar.bz2 \
 	&& mv /usr/src/owncloud /var/www/html \
 	&& chown -R www-data /var/www/html
 
-VOLUME /var/www/html
-
 COPY entrypoint.sh /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
