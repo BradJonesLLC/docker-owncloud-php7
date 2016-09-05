@@ -28,22 +28,25 @@ RUN { \
 		echo 'opcache.fast_shutdown=1'; \
 		echo 'opcache.enable_cli=1'; \
 	} > /usr/local/etc/php/conf.d/opcache-recommended.ini
+
 RUN a2enmod rewrite
 
 ENV OWNCLOUD_VERSION 9.1.0
-VOLUME /var/www/html
 
 RUN curl -fsSL -o owncloud.tar.bz2 \
 		"https://download.owncloud.org/community/owncloud-${OWNCLOUD_VERSION}.tar.bz2" \
 	&& curl -fsSL -o owncloud.tar.bz2.asc \
 		"https://download.owncloud.org/community/owncloud-${OWNCLOUD_VERSION}.tar.bz2.asc" \
 	&& export GNUPGHOME="$(mktemp -d)" \
-# gpg key from https://owncloud.org/owncloud.asc
+	# gpg key from https://owncloud.org/owncloud.asc
 	&& gpg --keyserver ha.pool.sks-keyservers.net --recv-keys E3036906AD9F30807351FAC32D5D5E97F6978A26 \
 	&& gpg --batch --verify owncloud.tar.bz2.asc owncloud.tar.bz2 \
 	&& rm -r "$GNUPGHOME" owncloud.tar.bz2.asc \
 	&& tar -xjf owncloud.tar.bz2 -C /usr/src/ \
-&& rm owncloud.tar.bz2
+	&& rm owncloud.tar.bz2 \
+	&& rm -rf /var/www/html \
+	&& mv /usr/src/owncloud /var/www/html \
+	&& chown -R www-data /var/www/html
 
 VOLUME /var/www/html
 
